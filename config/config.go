@@ -252,6 +252,10 @@ type AgentConfig struct {
 	// Ignored if "logformat" is not "structured".
 	StructuredLogMessageKey string `toml:"structured_log_message_key"`
 
+	// When set to true and using logformat = "structured", the tags of each
+	// input plugin are added to the log output as a "tags" JSON field.
+	LogAddInputTags bool `toml:"log_add_input_tags"`
+
 	// The file will be rotated after the time interval specified.  When set
 	// to 0 no time based rotation is performed.
 	LogfileRotationInterval Duration `toml:"logfile_rotation_interval"`
@@ -1690,6 +1694,7 @@ func (c *Config) buildInput(name, source string, tbl *ast.Table) (*models.InputC
 		Source:                  source,
 		AlwaysIncludeLocalTags:  c.Agent.AlwaysIncludeLocalTags,
 		AlwaysIncludeGlobalTags: c.Agent.AlwaysIncludeGlobalTags,
+		AddTagsToLogs:           c.Agent.LogAddInputTags,
 	}
 	cp.Interval, _ = c.getFieldDuration(tbl, "interval")
 	cp.Precision, _ = c.getFieldDuration(tbl, "precision")

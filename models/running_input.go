@@ -54,6 +54,9 @@ func NewRunningInput(input telegraf.Input, config *InputConfig) *RunningInput {
 	if err := logger.SetLogLevel(config.LogLevel); err != nil {
 		logger.Error(err)
 	}
+	if config.AddTagsToLogs && len(config.Tags) > 0 {
+		logger.AddAttribute("tags", config.Tags)
+	}
 	SetLoggerOnPlugin(input, logger)
 	SetStatisticsOnPlugin(input, logger, tags)
 
@@ -110,6 +113,10 @@ type InputConfig struct {
 	Filter                  Filter
 	AlwaysIncludeLocalTags  bool
 	AlwaysIncludeGlobalTags bool
+
+	// When true and using logformat = "structured", the input's tags are
+	// added to the log output as a "tags" JSON field.
+	AddTagsToLogs bool
 }
 
 func (*RunningInput) metricFiltered(metric telegraf.Metric) {
