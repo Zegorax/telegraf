@@ -574,6 +574,19 @@ func (c *Config) LoadAll(configFiles ...string) error {
 		}
 	}
 
+	// When loading multiple config files (e.g. via --config-directory), the
+	// [agent] section may be parsed after some input files, meaning
+	// buildInput saw StructuredLogAddInputTags=false and skipped the logger
+	// attribute. Therefore, it needs to be parsed again after loading all configs.
+	if c.Agent.StructuredLogAddInputTags {
+		for _, input := range c.Inputs {
+			if !input.Config.AddTagsToStructuredLogs && len(input.Config.Tags) > 0 {
+				input.Config.AddTagsToStructuredLogs = true
+				input.Log().AddAttribute("tags", input.Config.Tags)
+			}
+		}
+	}
+
 	// Sort the processors according to their `order` setting while
 	// using a stable sort to keep the file loading / file position order.
 	sort.Stable(c.Processors)
