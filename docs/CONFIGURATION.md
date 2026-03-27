@@ -313,7 +313,22 @@ The agent table configures Telegraf and the defaults used across all plugins.
 
 - **structured_log_add_input_tags**:
   To add input configuration tags to the log output.  
-  Example: `{"time":"2026-03-27T09:14:36.078389805Z","level":"INFO","msg":"Error connecting to target. Restarting in 10s...","category":"inputs","plugin":"execd","tags":{"server_host":"10.0.1.20","friendly_name":"friendly_server_name","log_source":"telegraf","metric_type":"logs"}}`  
+  Example:
+    ```
+      {
+        "time":"2026-03-27T09:14:36.078389805Z",
+        "level":"INFO",
+        "msg":"Error connecting to target. Restarting in 10s...",
+        "category":"inputs",
+        "plugin":"execd",
+        "tags":{
+          "server_host":"10.0.1.20",
+          "friendly_name":"friendly_server_name",
+          "log_source":"telegraf",
+          "metric_type":"logs"
+        }
+      }
+    ```
   Ignored if `logformat` is not "structured".
 
 - **logfile**:
