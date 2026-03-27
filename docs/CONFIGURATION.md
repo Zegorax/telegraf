@@ -330,7 +330,7 @@ The agent table configures Telegraf and the defaults used across all plugins.
         }
       }
     ```
-    
+
   Ignored if `logformat` is not "structured".
 
 - **logfile**:
